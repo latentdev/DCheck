@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+<data>
+    <variable
+        name="rvm"
+        type="com.latentdev.d_check.RideViewModel" />
+</data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray">
+
+        <RelativeLayout
+            android:id="@+id/list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="@android:color/background_light"
+            android:fadingEdge="horizontal"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="225dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingBottom="5dp"
+                android:text="@{rvm.title}"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/waittime"
+                android:layout_width="100dp"
+                android:layout_height="24dp"
+
+                android:gravity="end"
+                android:paddingBottom="5dp"
+                android:paddingEnd="5dp"
+                android:text="@{rvm.waitTime}"
+                android:layout_alignParentTop="true"
+                android:layout_alignEnd="@+id/waitmessage" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="100dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/waitmessage"
+                android:text="@{rvm.status}" />
+
+            <TextView
+                android:id="@+id/waitmessage"
+                android:layout_width="200dp"
+                android:layout_height="24dp"
+                android:gravity="end"
+                android:paddingEnd="5dp"
+                android:text="@{rvm.message}"
+                android:layout_below="@+id/title"
+                android:layout_toStartOf="@+id/view"
+                android:layout_marginEnd="10dp" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@+id/textView"
+                android:layout_margin="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/waitmessage"
+                android:layout_alignParentEnd="true"
+                android:checked="@={rvm.check}"
+                android:gravity="center"
+                android:paddingEnd="5dp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/checkbox"
+                android:layout_alignParentEnd="true"
+                android:text="Done" />
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="settings" type="com.latentdev.d_check.Model.Settings"/>
+    </data>
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_update_times"
+        android:checked="@{settings.keepTimesUpdated}" />
+
+</android.support.constraint.ConstraintLayout>
+</layout>
