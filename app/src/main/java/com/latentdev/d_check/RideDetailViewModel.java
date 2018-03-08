@@ -18,8 +18,9 @@ public class RideDetailViewModel extends BaseObservable {
     private String mRideLength;
     private String mSponsor;
     private String mSummary;
+    private String mRideCapacity;
 
-    public RideDetailViewModel(Ride ride,String land, String designer, String opening, String rideLength, String sponsor, String summary)
+    public RideDetailViewModel(Ride ride,String land, String designer, String opening, String rideLength, String sponsor, String summary, String rideCapacity)
     {
         setRide(ride);
         setLand(land);
@@ -27,7 +28,20 @@ public class RideDetailViewModel extends BaseObservable {
         setOpening(opening);
         setRideLength(rideLength);
         setSponsor(sponsor);
-        setmSummary(summary);
+        setSummary(summary);
+        setRideCapacity(rideCapacity);
+    }
+
+    public RideDetailViewModel(Ride ride)
+    {
+        setRide(ride);
+        setLand("");
+        setDesigner("");
+        setOpening("");
+        setRideLength("");
+        setSponsor("");
+        setSummary("");
+        setRideCapacity("");
     }
 
     @Bindable
@@ -65,6 +79,8 @@ public class RideDetailViewModel extends BaseObservable {
     {
         return mSummary;
     }
+    @Bindable
+    public String getRideCapacity() { return mRideCapacity; }
 
     public void setRide(Ride ride)
     {
@@ -103,10 +119,16 @@ public class RideDetailViewModel extends BaseObservable {
         notifyPropertyChanged(BR.sponsor);
     }
 
-    public void setmSummary(String summary)
+    public void setSummary(String summary)
     {
         mSummary = summary;
         notifyPropertyChanged(BR.summary);
+    }
+
+    public void setRideCapacity(String rideCapacity)
+    {
+        mRideCapacity = rideCapacity;
+        notifyPropertyChanged(BR.rideCapacity);
     }
 
 }

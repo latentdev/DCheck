@@ -105,6 +105,7 @@ public class MainActivity extends FragmentActivity implements DisneylandFragment
         disneyland = DisneylandFragment.newInstance(model);
         californiaAdventure = CaliforniaAdventureFragment.newInstance(model);
         settingsFragment = SettingsFragment.newInstance(settings);
+
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment, disneyland)
                 .commit();

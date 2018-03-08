@@ -36,18 +36,27 @@ public class RideDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Bundle extras = getIntent().getExtras();
         mRide = extras.getParcelable("ride");
-        toolbar.setTitle(mRide.getName());
+        //toolbar.setTitle(mRide.getName());
         setSupportActionBar(toolbar);
-        try {
-            mContent = new Network().execute("http://disneyparks.wikia.com/wiki/"+mRide.getName().replace(" ","_")).get();
-            if(!mContent.contains("class=\"infobox\""))
-            {
-                mContent = new Network().execute("http://disneyparks.wikia.com/wiki/"+mRide.getName().replace(" ","_")+"_(Disneyland_Park)").get();
-            }
-            mDocument = Jsoup.parse(mContent);
-        }catch(ExecutionException e) { Log.d("Network",e.getMessage()); }
-        catch(InterruptedException e) { Log.d("Network",e.getMessage()); }
+        //handle unique urls like chip 'n dale's treehouse = chip_n'_dale's_treehouse or the case where there is no info box
+        final String url = "http://disneyparks.wikia.com/wiki/"+mRide.getName().replace(" ","_").replace("\"","");
+//        try {
+//            mDocument = new HTMLAsyncTask().execute(url).get();
+//            if(!mDocument.toString().contains("class=\"infobox\""))
+//            {
+//                mDocument = new HTMLAsyncTask().execute(url+"_(Disneyland_Park)").get();
+//                if(!mDocument.toString().contains("class=\"infobox\""))
+//                {
+//                    mDocument=null;
+//                }
+//            }
+//
+//            //mDocument = Jsoup.parse(mContent);
+//        }catch(ExecutionException e) { Log.d("Network",e.getMessage()); }
+//        catch(InterruptedException e) { Log.d("Network",e.getMessage()); }
+        String searchQuery = mRide.getName().replace("Walt Disney ","").replace("Walt Disney's ","").replace(" ","+").replace("\"","")+"+Disneyland";
 
+        GetDocument(searchQuery);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,20 +65,27 @@ public class RideDetailActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        Elements tables = mDocument.getElementsByClass("infobox");
-        Element infoTable = tables.first();
-        ArrayList<String> text = new ArrayList<>();
-        for(Element e:infoTable.getElementsByTag("td"))
+//        Elements tables = mDocument.getElementsByClass("infobox");
+//        Element infoTable = tables.first();
+//        ArrayList<String> text = new ArrayList<>();
+//        for(Element e:infoTable.getElementsByTag("td"))
+//        {
+//            text.add(e.text());
+//        }//children().get(0).children().get(3).children().get(1).children().get(0).attr("title");//.children().get(6); //.select("b[text=Land]").first().parent()
+//        Elements summary = mDocument.getElementById("Summary").children();
+//        String lines = new String();
+//        for(Element e:summary)
+//        {
+//            lines += (e.text() + "\\n\\n");
+//        }
+        RideDetailViewModel vm;
+
+        if(mDocument != null) {
+            vm = new HTMLScrapper().ParseDetails(mRide, mDocument); //new RideDetailViewModel(mRide,text.get(4), text.get(6), text.get(8), text.get(14), text.get(18), lines );
+        }else
         {
-            text.add(e.text());
-        }//children().get(0).children().get(3).children().get(1).children().get(0).attr("title");//.children().get(6); //.select("b[text=Land]").first().parent()
-        Elements summary = mDocument.getElementById("Summary").children();
-        String lines = new String();
-        for(Element e:summary)
-        {
-            lines += (e.text() + "\\n\\n");
+            vm = new RideDetailViewModel(mRide);
         }
-        RideDetailViewModel vm = new RideDetailViewModel(mRide,text.get(4), text.get(6), text.get(8), text.get(14), text.get(18), lines );
         ActivityRideDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_ride_detail);
 
         binding.setViewModel(vm);
@@ -77,5 +93,22 @@ public class RideDetailActivity extends AppCompatActivity {
         //text.size();
 
 
+    }
+
+    private void GetDocument(String ride)
+    {
+        String url = "http://disneyparks.wikia.com/wiki/Special:Search?query="+ride;
+        try{
+            mDocument = new HTMLAsyncTask().execute(url).get();
+        }catch(ExecutionException e) { Log.d("Network",e.getMessage()); }
+        catch(InterruptedException e) { Log.d("Network",e.getMessage()); }
+        if(mDocument!=null)
+        {
+            url = new HTMLScrapper().GetLink(mDocument);
+        }
+        try{
+            mDocument = new HTMLAsyncTask().execute(url).get();
+        }catch(ExecutionException e) { Log.d("Network",e.getMessage()); }
+        catch(InterruptedException e) { Log.d("Network",e.getMessage()); }
     }
 }
